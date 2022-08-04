@@ -9,6 +9,7 @@ on:
 
 jobs:
   deploy:
+    concurrency: ci-${{ github.ref }}
     name: Build artifacts for frontend
     runs-on: ubuntu-latest    
     steps:
@@ -20,19 +21,10 @@ jobs:
     - name: npm install and build
       run: |
         cd frontend
-        sed -i 's/\/build/# \/build/g' .gitignore
         npm install
         CI=false npm run build
-    
-    - name: push build artifacts to published branch
-      run: |
-        git config --global push.default current
-        git config --global pull.default current
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git fetch --all
-        git add -A
-        git commit -m "publishing code to be used by Urturn"
-        git checkout published
-        git reset --hard main
-        git push origin published --force
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: .
+        branch: published
