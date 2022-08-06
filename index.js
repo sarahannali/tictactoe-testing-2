@@ -135,6 +135,7 @@ function onPlayerMove(plr, move, boardGame) {
  * @returns {BoardGameResult}
  */
  function onPlayerQuit(plr, boardGame) {
+  console.log("HI")
   const { state, players } = boardGame;
 
   if (players.length === 1) {
